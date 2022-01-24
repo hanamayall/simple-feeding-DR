@@ -8,9 +8,10 @@ Pkg.activate(".")
 
 ## Add necessary packages to project
 Pkg.add("Plots")
+Pkg.add("DifferentialEquations")
 
 ## check package status
 Pkg.status()
 
 ## load packages
-using Plots
+using Plots, DifferentialEquations
