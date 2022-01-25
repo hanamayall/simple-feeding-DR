@@ -10,17 +10,18 @@ tl = [1, 2, 3]
 
 # Z is consumer-resource body-mass ratio
 # In Binzer paper, 3 size structures are used: Z = 1, 10, 100
-Z_list = [1, 10, 100]
+Z = [1, 10, 100]
 
-Z = 10
+Z = 1
 
 # Body mass calculated from Z and trophic levels
 f(x) = Z ^ (x - 1)
 M = f.(tl)
 
-#### Parameter tuple
+#### Parameters
 # Create a tuple containing the parameters required to build the initial food web
 FoodWebPar = (
     tl = tl, # 
-    Z = 1 # body mass ratio 1 as default
+    Z = 1, # body mass ratio 1 as default
+    M = M # body mass calculated by Z
 )
