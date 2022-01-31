@@ -112,22 +112,44 @@ end
 
 
 ## Maximum ingestion - y
-
-
-
+function max_ingestion_BA(param, M, Z, T)
+    # extract parameter values from param
+    I = param.I_y
+    si = param.si_y
+    sj = param.sj_y
+    Ea = param.Ea_y
+    # calculate terms in max ingestion equation
+    intercept = exp(I)
+    massi = M[i]^si 
+    massj = M[j]^sj 
+    boltz = boltmann(Ea, T)
+    th_m = handling_mass(param, Z)
+    th_T = handling_temp(param, Z)
+    return intercept * massi * massj * boltz * 1/th_m * 1/th_T
+end
 
 
 ## Half saturation density 
-
-
-
+function half_saturation_BA(param, M, Z, T)
+    # extract parameter values from param
+    I = param.I_B0
+    si = param.si_B0
+    sj = param.sj_B0
+    Ea = param.Ea_B0
+    # calculate terms in half saturation equation
+    intercept = exp(I)
+    massi = M[i]^si 
+    massj = M[j]^sj 
+    boltz = boltmann(Ea, T)
+    α_m = attack_mass(param, Z)
+    th_m = handling_mass(param, Z)
+    th_T = handling_temp(param, Z)
+    return intercept * massi * massj * boltz * 1/(α_m * th_m * th_T)
+end
 
 
 ##### Parameters
 # Create a tuple containing the parameters required to calculate the mass/ temperature dependent biological rates
-    # Ea - list of activation energies 
-
-
 param = (
     # Intercepts
     I_K = [1:1:20;],
