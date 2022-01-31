@@ -4,12 +4,12 @@
 # BEFW model
 function BEFW(du, u, ModelParameters, t)
     # basal species growth 
-    rB = growth_BA(...)                     ### fill in r arguments ###
+    rB = growth_BA(ModelParameters[param], ModelParameters.M, T)                     ### fill in r arguments ###
     GB = 1 - (u[1] / carryingcapacity_BA()) ### fill in K arguments ###
     bas_growth = rB * GB * u[1]
 
     # consumption of basal species by intermediate
-    consumption_int = 
+    consumption_int =  
 
     # consumption of intermediate by top
     consumption_top = 
@@ -30,7 +30,9 @@ end
 
 # all the parameters
 ModelParameters = (
-    FoodWebPar, # to generate tri-trophic food web
+    FoodWeb, # to generate tri-trophic food web
     param # to calculate biological rates
 )
+
+T = 293.15
 typeof(ModelParameters)

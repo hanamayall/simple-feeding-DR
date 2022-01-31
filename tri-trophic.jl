@@ -17,8 +17,10 @@ M = f.(tl)
 
 #### Parameters
 # Create a tuple containing the parameters required to build the initial food web
-FoodWebPar = (
+FoodWeb = (
     tl = tl, # 
     Z = 1, # body mass ratio 1 as default
-    M = M # body mass calculated by Z
-)~
+    M = f.(tl) # body mass calculated by Z
+)
+
+FoodWeb()

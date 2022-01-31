@@ -31,7 +31,6 @@ function growth_BA(param, M, T)
 end
 
 
-
 ## Carrying capacity - K 
 # the intercept I is varied to investigate the effects of enrichment
 function carryingcapacity_BA(param, M, T)
@@ -82,7 +81,7 @@ function attack_mass(param, Z)
     Z_scale1 = s1 * log(Z)
     Z_scale2 = s2 * (log(Z))^2
     return exp(I + Z_scale1 + Z_scale2)
-end
+end 
 
 
 ## Handling time (mass dependence) thm
