@@ -9,9 +9,6 @@
 tl = [1, 2, 3]
 
 # Z is consumer-resource body-mass ratio
-# In Binzer paper, 3 size structures are used: Z = 1, 10, 100
-Z = [1, 10, 100]
-
 Z = 1
 
 # Body mass calculated from Z and trophic levels
@@ -24,4 +21,4 @@ FoodWebPar = (
     tl = tl, # 
     Z = 1, # body mass ratio 1 as default
     M = M # body mass calculated by Z
-)
+)~
