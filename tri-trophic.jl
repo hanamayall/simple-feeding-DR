@@ -5,22 +5,25 @@
 
 # A = [0 1 0; 0 0 1; 0 0 0]
 
-## Trophic levels 
-tl = [1, 2, 3]
+# ## Trophic levels 
+# tl = [1, 2, 3]
 
-# Z is consumer-resource body-mass ratio
-Z = 1
+# # Z is consumer-resource body-mass ratio
+# Z = 100
 
-# Body mass calculated from Z and trophic levels
-f(x) = Z ^ (x - 1)
-M = f.(tl)
+# # basal species mass
+# m = 0.01
+
 
 #### Parameters
-# Create a tuple containing the parameters required to build the initial food web
-FoodWeb = (
-    tl = tl, # 
-    Z = 1, # body mass ratio 1 as default
-    M = f.(tl) # body mass calculated by Z
-)
+# write a function to generate mass and foodweb 
+function Network(;Z, m = 0.01, tl = [1, 2, 3])
+    # Body mass calculated from Z, trophic levels and basal mass
+    M = m * (Z .^ (tl .- 1))
+    FW = (Z = Z, M = M)
+    return FW
+end
 
-FoodWeb()
+
+
+#### Define masses of food chain
