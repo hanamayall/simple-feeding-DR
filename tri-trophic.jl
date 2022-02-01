@@ -25,5 +25,4 @@ function Network(;Z, m = 0.01, tl = [1, 2, 3])
 end
 
 
-
-#### Define masses of food chain
+Network(Z=10)[:M]
