@@ -2,37 +2,32 @@
 # three species dynamical DifferentialEquations
 
 # BEFW model
-function BEFW(du, u, ModelParameters, t)
-    # basal species growth 
-    rB = growth_BA(ModelParameters[param], ModelParameters.M, T)                     ### fill in r arguments ###
-    GB = 1 - (u[1] / carryingcapacity_BA()) ### fill in K arguments ###
-    bas_growth = rB * GB * u[1]
+function BEFW(du, u, p, t)
+    ### growth gain 
+    G = 1 .- (u ./ p.K) # logistic growth term
+    growth = r .* G .* B 
+    @assert growth[2] ==0
+    @assert growth[3] ==0
 
-    # consumption of basal species by intermediate
-    consumption_int =  
+    ### consumption loss
+    # functional response terms
+    for i in eachindex(u)
+        return 
+    end
+    
+    consumption_loss = 
 
-    # consumption of intermediate by top
-    consumption_top = 
+    ### consumption gain
 
-    # metabolism of intermediate species
-    xI = metabolism_BA(...)                 ### fill in x arguments ###
-    metabolism_int = xI * u[2]
+    consumption_gain
 
-    # metabolism of top species
-    xT = metabolism_BA(...)                 ### fill in x arguments ###
-    metabolism_top = xT * u[3]
-
+    ### metabolism loss
+    metabolism_loss = p.x .* u
+    @assert metabolism_loss[1] == 0
+    
     # calculate changes in biomass
-    du[1] = bas_growth - consumption_int 
-    du[2] = (e.int * consumption_int) - consumption_top - metabolism_int
-    du[3] = (e.top * consumption_top)  - metabolism_top
+    dBdt = growth .- consumption_loss .+ consumption_gain .- metabolism_loss
+
+    return dBdt
 end
 
-# all the parameters
-ModelParameters = (
-    FoodWeb, # to generate tri-trophic food web
-    param # to calculate biological rates
-)
-
-T = 293.15
-typeof(ModelParameters)

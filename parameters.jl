@@ -1,4 +1,5 @@
 #### Function to define parameters 
+# Create a NamedTuple containing the parameters required to calculate the mass/ temperature dependent biological rates
 
 # define parameters 
 param = (
@@ -37,20 +38,34 @@ param = (
     Ea_r = -0.84,
     Ea_y = -0.26,
     Ea_B0 = 0.12,
-    Ea_x = -0.69
-    )
+    Ea_x = -0.69,
 
+    # Assimilation efficiencies
+    e_I = ,
+    e_T = ,
 
-##### FUNCTION to create tuple of parameter groups
+    # Hill coefficient
+    h = 1
+)
+typeof(param)
+
+##### FUNCTION to create tuple of parameters needed for dBdt 
+
+# assign a value for Z, I_K and T as it would be in a loop, just to check if ModelParameters works to generate parameters
 Z = 10
 I_K = 1
+T = 293.15
+
+
 function ModelParameters(param, Z, T, I_K)
     
     ### Calculate body masses
-    Z, M = Network(Z = 10)
+    M = BodyMasses(Z)
 
     ### Calculate carrying capacity
     K = carryingcapacity_BA(I_K, param, M, T)
+    @assert K[2] == 0 # defensive programming
+    @assert K[3] == 0 
 
     ### Calculate producer growth rate
     r = growth_BA(param, M, T)
@@ -58,7 +73,9 @@ function ModelParameters(param, Z, T, I_K)
     @assert r[3] == 0 
 
     ### Calculate metabolism
-    x = 
+    x = metabolism_BA(param, M, T)
+    @assert x[1] == 0
+
 
     # Combine parameters into Tuple
     ModelParameters = (FW)

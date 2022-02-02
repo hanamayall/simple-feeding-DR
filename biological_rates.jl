@@ -2,9 +2,7 @@
 ####### Mass and temperature dependent biological rates
 
 ##### Parameters
-# Create a tuple containing the parameters required to calculate the mass/ temperature dependent biological rates
 
-typeof(param)
 
 #### Mass and temperature dependence
 # write a function to calculate the Boltzmann term from the activation energy
@@ -33,11 +31,12 @@ function growth_BA(param, M, T)
     intercept = exp(I)
     massi = M .^ si 
     boltz = boltzmann(Ea, T)
-    return intercept .* massi .* boltz
+    growth = intercept .* massi .* boltz
+    growth[2:3] .= 0  # only basal species has growth rate
+    return growth
 end
+# growth_BA(param, M, T)
 
-T = 333.15
-growth_BA(param, M, T)
 
 ## Carrying capacity - K 
 # the intercept I is varied to investigate the effects of enrichment
@@ -50,9 +49,11 @@ function carryingcapacity_BA(I_K, param, M, T)
     intercept = exp(I)
     massi = M .^ si 
     boltz = boltzmann(Ea, T)
-    return intercept .* massi .* boltz
+    carrycap = intercept .* massi .* boltz
+    carrycap[2:3] .= 0   # only basal species has carrying capacity
+    return carrycap
 end
-carryingcapacity_BA(I_K, param, M, T)
+#carryingcapacity_BA(I_K, param, M, T)
 
 ## Metabolism - x
 function metabolism_BA(param, M, T)
@@ -64,8 +65,11 @@ function metabolism_BA(param, M, T)
     intercept = exp(I)
     massi = M .^ si 
     boltz = boltzmann(Ea, T)
-    return intercept .* massi .* boltz
+    metab = intercept .* massi .* boltz
+    metab[1] = 0 # basal species has no metabolic rate
+    return metab
 end
+# metabolism_BA(param, M, T)
 
 
 # the following parameters are required for feeding terms maximum ingestion and half saturation density, which are resource and consumer specific
@@ -133,12 +137,20 @@ function max_ingestion_BA(param, M, Z, T)
     boltz = boltzmann(Ea, T)
     th_m = handling_mass(param, Z)
     th_T = handling_temp(param, Z)
-    return intercept .* massi .* massj .* boltz .* 1/th_m .* 1/th_T
-end
 
+    # create empty matrix for values
+    mat = zeros(3,3)
+
+    # intermediate eating basal
+    mat[1,2] = intercept * massi[1] * massj[2] * boltz * 1/th_m * 1/th_T
+    # top eating intermediate
+    mat[2,3] = intercept * massi[2] * massj[3] * boltz * 1/th_m * 1/th_T
+
+    return mat
+end
 max_ingestion_BA(param, M, Z, T)
 
-## Half saturation density 
+## Half saturation density - β
 function half_saturation_BA(param, M, Z, T)
     # extract parameter values from param
     I = param.I_B0
@@ -147,12 +159,21 @@ function half_saturation_BA(param, M, Z, T)
     Ea = param.Ea_B0
     # calculate terms in half saturation equation
     intercept = exp(I)
-    massi = M[i]^si 
-    massj = M[j]^sj 
+    massi = M .^ si 
+    massj = M .^ sj 
     boltz = boltzmann(Ea, T)
     α_m = attack_mass(param, Z)
     th_m = handling_mass(param, Z)
     th_T = handling_temp(param, Z)
-    return intercept * massi * massj * boltz * 1/(α_m * th_m * th_T)
+
+    # create empty matrix for values
+    mat = zeros(3,3)
+
+    # intermediate eating basal
+    mat[1,2] = intercept * massi[1] * massj[2] * boltz * 1/(α_m * th_m * th_T)
+    # top eating intermediate
+    mat[2,3] = intercept * massi[2] * massj[3] * boltz * 1/(α_m * th_m * th_T)
+
+    return mat
 end
- 
+ #half_saturation_BA(param, M, Z , T)
