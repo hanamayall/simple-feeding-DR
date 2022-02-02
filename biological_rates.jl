@@ -8,7 +8,7 @@ typeof(param)
 
 #### Mass and temperature dependence
 # write a function to calculate the Boltzmann term from the activation energy
-function boltmann(Ea, T)
+function boltzmann(Ea, T)
     T0 = 293.15
     k = 8.617e-5 
     normalised_T = T0 - T
@@ -31,25 +31,28 @@ function growth_BA(param, M, T)
     Ea = param.Ea_r
     # calculate terms in growth equation
     intercept = exp(I)
-    massi = M[i]^si 
-    boltz = boltmann(Ea, T)
-    return intercept * massi * boltz
+    massi = M .^ si 
+    boltz = boltzmann(Ea, T)
+    return intercept .* massi .* boltz
 end
 
+T = 333.15
+growth_BA(param, M, T)
 
 ## Carrying capacity - K 
 # the intercept I is varied to investigate the effects of enrichment
-function carryingcapacity_BA(;I_K, param, M, T)
+function carryingcapacity_BA(I_K, param, M, T)
     # extract parameter values from param
     I = I_K
     si = param.si_K
     Ea = param.Ea_K
     # calculate terms in carrying capacity equation
     intercept = exp(I)
-    massi = M[i]^si 
-    boltz = boltmann(Ea, T)
-    return intercept * massi * boltz
+    massi = M .^ si 
+    boltz = boltzmann(Ea, T)
+    return intercept .* massi .* boltz
 end
+carryingcapacity_BA(I_K, param, M, T)
 
 ## Metabolism - x
 function metabolism_BA(param, M, T)
@@ -59,9 +62,9 @@ function metabolism_BA(param, M, T)
     Ea = param.Ea_x
     # calculate terms in metabolism equation
     intercept = exp(I)
-    massi = M[i]^si 
-    boltz = boltmann(Ea, T)
-    return intercept * massi * boltz
+    massi = M .^ si 
+    boltz = boltzmann(Ea, T)
+    return intercept .* massi .* boltz
 end
 
 
@@ -125,14 +128,15 @@ function max_ingestion_BA(param, M, Z, T)
     Ea = param.Ea_y
     # calculate terms in max ingestion equation
     intercept = exp(I)
-    massi = M[i]^si 
-    massj = M[j]^sj 
-    boltz = boltmann(Ea, T)
+    massi = M .^ si 
+    massj = M .^ sj 
+    boltz = boltzmann(Ea, T)
     th_m = handling_mass(param, Z)
     th_T = handling_temp(param, Z)
-    return intercept * massi * massj * boltz * 1/th_m * 1/th_T
+    return intercept .* massi .* massj .* boltz .* 1/th_m .* 1/th_T
 end
 
+max_ingestion_BA(param, M, Z, T)
 
 ## Half saturation density 
 function half_saturation_BA(param, M, Z, T)
@@ -145,7 +149,7 @@ function half_saturation_BA(param, M, Z, T)
     intercept = exp(I)
     massi = M[i]^si 
     massj = M[j]^sj 
-    boltz = boltmann(Ea, T)
+    boltz = boltzmann(Ea, T)
     α_m = attack_mass(param, Z)
     th_m = handling_mass(param, Z)
     th_T = handling_temp(param, Z)

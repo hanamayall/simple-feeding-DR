@@ -1,15 +1,7 @@
-## Function to define parameters 
+#### Function to define parameters 
 
-function Biorates(;I_K; T, param = param)
-    r = growth_BA()
-end
-
-
-##### FUNCTION to create tuple of parameter groups
-Z = 10
-function ModelParameters(Z, T)
-    # define parameters 
-    param = (
+# define parameters 
+param = (
     # Intercepts
     I_r = -15.68,
     I_y = -9.66,
@@ -48,18 +40,25 @@ function ModelParameters(Z, T)
     Ea_x = -0.69
     )
 
+
+##### FUNCTION to create tuple of parameter groups
+Z = 10
+I_K = 1
+function ModelParameters(param, Z, T, I_K)
+    
     ### Calculate body masses
-    FW = Network(Z=Z)
-    M = FW[:M]
+    Z, M = Network(Z = 10)
 
     ### Calculate carrying capacity
-    K = carryingcapacity_BA(I_K = I_K, param, M, T)
+    K = carryingcapacity_BA(I_K, param, M, T)
 
     ### Calculate producer growth rate
     r = growth_BA(param, M, T)
+    @assert r[2] == 0 # defensive programming
+    @assert r[3] == 0 
 
     ### Calculate metabolism
-    
+    x = 
 
     # Combine parameters into Tuple
     ModelParameters = (FW)
