@@ -41,11 +41,7 @@ param = (
     Ea_x = -0.69,
 
     # Assimilation efficiencies
-    e_I = ,
-    e_T = ,
-
-    # Hill coefficient
-    h = 1
+    e = 0.85
 )
 typeof(param)
 
@@ -57,7 +53,7 @@ I_K = 1
 T = 293.15
 
 
-function ModelParameters(param, Z, T, I_K)
+function ModelParameters(param, T, I_K, Z)
     
     ### Calculate body masses
     M = BodyMasses(Z)
@@ -76,8 +72,16 @@ function ModelParameters(param, Z, T, I_K)
     x = metabolism_BA(param, M, T)
     @assert x[1] == 0
 
+    ### Calculate maximum ingestion
+    y = max_ingestion_BA(param, M, T)
+
+    ### Calculate half saturation density
+    β = half_saturation_BA(param, M, T)
 
     # Combine parameters into Tuple
     ModelParameters = (FW)
     return ModelParameters
+
 end
+
+ModelParameters(param, T, I_K, Z)

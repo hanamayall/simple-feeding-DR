@@ -16,22 +16,22 @@
 
 
 #### Parameters
-# write a function to generate mass and foodweb 
-function Network(m = 0.01, tl = [1, 2, 3]; Z)
-    # Body mass calculated from Z, trophic levels and basal mass
-    M = m * (Z .^ (tl .- 1))
-    FW = (Z = Z, M = M)
-    return FW
-end
+# # write a function to generate mass and foodweb 
+# function Network(m = 0.01, tl = [1, 2, 3]; Z)
+#     # Body mass calculated from Z, trophic levels and basal mass
+#     M = m * (Z .^ (tl .- 1))
+#     FW = (Z = Z, M = M)
+#     return FW
+# end
 
-Z, M = Network(Z = 10)
+# Z, M = Network(Z = 10)
 
 
 
 # write a function to generate just body masses
-function BodyMasses(m = 0.01, tl = [1, 2, 3]; Z)
+function BodyMasses(Z; m = 0.01, tl = [1, 2, 3])
     # Body mass calculated from Z, trophic levels and basal mass
-    M = m * (Z .^ (tl .- 1))
+    M = m .* (Z .^ (tl .- 1))
     return M
 end
 

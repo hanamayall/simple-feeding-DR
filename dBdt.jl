@@ -10,11 +10,8 @@ function BEFW(du, u, p, t)
     @assert growth[3] ==0
 
     ### consumption loss
-    # functional response terms
-    for i in eachindex(u)
-        return 
-    end
-    
+ 
+
     consumption_loss = 
 
     ### consumption gain
