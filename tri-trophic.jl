@@ -29,10 +29,10 @@
 
 
 # write a function to generate just body masses
-function BodyMasses(Z; m = 0.01, tl = [1, 2, 3])
+function BodyMasses(m = 0.01, tl = [1, 2, 3]; Z)
     # Body mass calculated from Z, trophic levels and basal mass
     M = m .* (Z .^ (tl .- 1))
     return M
 end
 
-M = BodyMasses(Z = 10)
+M = BodyMasses(Z=Z)
