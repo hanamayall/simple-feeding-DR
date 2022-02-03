@@ -10,9 +10,7 @@ function BEFW(du, u, p, t)
     @assert growth[3] ==0
 
     ### consumption loss
- 
-
-    consumption_loss = 
+    consumption_loss =  
 
     ### consumption gain
 

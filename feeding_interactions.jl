@@ -4,8 +4,8 @@
 
 function functional_response(h = 1 ;B, parameters)
     ### Extract maximum ingestion and half saturation density
-    y = p.y
-    B0 = p.B0
+    y = parameters.y
+    B0 = parameters.B0
 
     # Empty matrix to store functional responses 
     F = zeros(3,3)
@@ -27,7 +27,7 @@ function functional_response(h = 1 ;B, parameters)
     return F    
 end
 
-# functional_response(B = u, parameters = p)
+#functional_response(B = u, parameters = p)
 
 
 ## playing and testing
