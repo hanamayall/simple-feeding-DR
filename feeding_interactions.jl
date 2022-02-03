@@ -1,6 +1,6 @@
 ####### Mass and temperature dependent feeding interaction functional responses
 
-# function to generate F given B (biomass of species)
+# function to generate F given B (biomass of species), and parameters generated using ModelParameters()
 
 function functional_response(h = 1 ;B, parameters)
     ### Extract maximum ingestion and half saturation density
