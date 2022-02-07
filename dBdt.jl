@@ -3,15 +3,19 @@
 
 # BEFW model
 function BEFW(du, u, p, t)
-    ### growth gain 
+    ### Growth (gain) 
     G = 1 .- (u ./ p.K) # logistic growth term
     growth = r .* G .* B 
     @assert growth[2] ==0
     @assert growth[3] ==0
 
-    ### consumption loss
-    consumption_loss =  
+    ### Consumption
+    # functional response
+    Fij = functional_response(B = u, parameters = p)
 
+    ### consumption loss
+    consumption_loss =   
+ 
     ### consumption gain
 
     consumption_gain
