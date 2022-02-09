@@ -13,32 +13,35 @@ function functional_response(h = 1 ;B, parameters)
     # find feeding interactions as cartesian index of matrix
     idf = findall(!iszero, y)
     # identify consumers from idf coords
-    consumers = [i[2] for i in idf]
+    consumers = [i[1] for i in idf]
     # identify resources of consumers
     for c in consumers
-        # find resource index
-        resources = findall(!iszero, y[:,c]) # e.g if c = 2 (intermediate), then r = 1 (basal)
+        # find all resource indexes for each consumer
+        resources = findall(!iszero, y[c,:]) # e.g if c = 2 (intermediate), then r = 1 (basal)
         for r in resources
-            num = y[r,c] * (B[r]^h)
-            denom = (B0[r,c]^h) + B[r]
-            F[r,c] = num / denom
+            num = y[c,r] * (B[r]^h)
+            denom = (B0[c,r]^h) + B[r]
+            F[c,r] = num / denom
         end
     end 
     return F    
 end
 
-#functional_response(B = u, parameters = p)
+fr = functional_response(B = u, parameters = p)
 
 
-## playing and testing
+#write function to calculate consumption gains and losses from the functional response, biomasses and assimilation energy
+function consumption(e = 0.85; B, fr)
+    feeding = B .* fr
+    gain = e .* vec(sum(feeding, dims = 2))
+    loss = vec(sum(feeding, dims = 1))
+    return (gain, loss)
+end
+#consumption(B = v1, fr = f1)
 
-# Fex = [0 0.5 0; 0 0 0.6; 0 0 0]
-# idf = findall(!iszero, Fex)
-# unique([i[1] for i in idf])
-# [i[2] for i in idf]
+### Playing, testing ...
+# v1 = [1, 10, 100]
+# f1 = [0 0 0; .5 0 0; 0 .8 0]
 
-# p.y
-
-# Fex[2,3]
-
+# vf1 = v1 .* f1
 

@@ -13,19 +13,16 @@ function BEFW(du, u, p, t)
     # functional response
     Fij = functional_response(B = u, parameters = p)
 
-    ### consumption loss
-    consumption_loss =   
- 
-    ### consumption gain
-
-    consumption_gain
+    # gains and losses
+    consumption_gain, consumption_loss = consumption(B = u, fr = Fij)
+    @assert consumption_gain[0] == 0 
 
     ### metabolism loss
     metabolism_loss = p.x .* u
     @assert metabolism_loss[1] == 0
     
     # calculate changes in biomass
-    dBdt = growth .- consumption_loss .+ consumption_gain .- metabolism_loss
+    dBdt = growth .+ consumption_gain .- consumption_loss .- metabolism_loss
 
     return dBdt
 end

@@ -16,15 +16,15 @@ param = (
     I_thT = 0.5,
 
     # Resource slopes
-    si_K = 0.28,
-    si_r = -0.25,
-    si_y = 0.45,
-    si_B0 = 0.2,
-    si_x = -0.31,
+    s_res_K = 0.28,
+    s_res_r = -0.25,
+    s_res_y = 0.45,
+    s_res_B0 = 0.2,
+    s_res_x = -0.31,
 
     # Consumer slopes (consumption)
-    sj_y = -0.47,
-    sj_B0 = 0.33,
+    s_con_y = -0.47,
+    s_con_B0 = 0.33,
 
     # Ratio slopes (attack and handling)
     s1_αm = 0.39,
@@ -70,13 +70,13 @@ end
 function growth_BA(param, M, T)
     # extract parameter values from param
     I = param.I_r
-    si = param.si_r
+    s_res = param.s_res_r
     Ea = param.Ea_r
     # calculate terms in growth equation
     intercept = exp(I)
-    massi = M .^ si 
+    mass = M .^ s_res 
     boltz = boltzmann(Ea, T)
-    growth = intercept .* massi .* boltz
+    growth = intercept .* mass .* boltz
     growth[2:3] .= 0  # only basal species has growth rate
     return growth
 end
@@ -88,13 +88,13 @@ end
 function carryingcapacity_BA(I_K, param, M, T)
     # extract parameter values from param
     I = I_K
-    si = param.si_K
+    s_res = param.s_res_K
     Ea = param.Ea_K
     # calculate terms in carrying capacity equation
     intercept = exp(I)
-    massi = M .^ si 
+    mass = M .^ s_res
     boltz = boltzmann(Ea, T)
-    carrycap = intercept .* massi .* boltz
+    carrycap = intercept .* mass .* boltz
     carrycap[2:3] .= 0   # only basal species has carrying capacity
     return carrycap
 end
@@ -104,13 +104,13 @@ end
 function metabolism_BA(param, M, T)
     # extract parameter values from param
     I = param.I_x
-    si = param.si_x
+    s_res = param.s_res_x
     Ea = param.Ea_x
     # calculate terms in metabolism equation
     intercept = exp(I)
-    massi = M .^ si 
+    mass = M .^ s_res 
     boltz = boltzmann(Ea, T)
-    metab = intercept .* massi .* boltz
+    metab = intercept .* mass .* boltz
     metab[1] = 0 # basal species has no metabolic rate
     return metab
 end
@@ -172,13 +172,13 @@ end
 function max_ingestion_BA(param, M, Z, T)
     # extract parameter values from param
     I = param.I_y
-    si = param.si_y
-    sj = param.sj_y
+    s_res = param.s_res_y
+    s_con = param.s_con_y
     Ea = param.Ea_y
     # calculate terms in max ingestion equation
     intercept = exp(I)
-    massi = M .^ si 
-    massj = M .^ sj 
+    mass_res = M .^ s_res
+    mass_con = M .^ s_con
     boltz = boltzmann(Ea, T)
     th_m = handling_mass(param, Z)
     th_T = handling_temp(param, Z)
@@ -187,9 +187,9 @@ function max_ingestion_BA(param, M, Z, T)
     mat = zeros(3,3)
 
     # intermediate eating basal
-    mat[1,2] = intercept * massi[1] * massj[2] * boltz * 1/th_m * 1/th_T
+    mat[2,1] = intercept * mass_res[1] * mass_con[2] * boltz * 1/th_m * 1/th_T
     # top eating intermediate
-    mat[2,3] = intercept * massi[2] * massj[3] * boltz * 1/th_m * 1/th_T
+    mat[3,2] = intercept * mass_res[2] * mass_con[3] * boltz * 1/th_m * 1/th_T
 
     return mat
 end
@@ -199,13 +199,13 @@ end
 function half_saturation_BA(param, M, Z, T)
     # extract parameter values from param
     I = param.I_B0
-    si = param.si_B0
-    sj = param.sj_B0
+    s_res = param.s_res_B0
+    s_con = param.s_con_B0
     Ea = param.Ea_B0
     # calculate terms in half saturation equation
     intercept = exp(I)
-    massi = M .^ si 
-    massj = M .^ sj 
+    mass_res = M .^ s_res 
+    mass_con = M .^ s_con
     boltz = boltzmann(Ea, T)
     α_m = attack_mass(param, Z)
     th_m = handling_mass(param, Z)
@@ -215,10 +215,10 @@ function half_saturation_BA(param, M, Z, T)
     mat = zeros(3,3)
 
     # intermediate eating basal
-    mat[1,2] = intercept * massi[1] * massj[2] * boltz * 1/(α_m * th_m * th_T)
+    mat[2,1] = intercept * mass_res[1] * mass_con[2] * boltz * 1/(α_m * th_m * th_T)
     # top eating intermediate
-    mat[2,3] = intercept * massi[2] * massj[3] * boltz * 1/(α_m * th_m * th_T)
-
+    mat[3,2] = intercept * mass_res[2] * mass_con[3] * boltz * 1/(α_m * th_m * th_T)
     return mat
 end
 # half_saturation_BA(param, M, Z , T)
+
