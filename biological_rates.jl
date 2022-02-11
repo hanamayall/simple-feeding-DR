@@ -80,7 +80,7 @@ function growth_BA(param, M, T)
     growth[2:3] .= 0  # only basal species has growth rate
     return growth
 end
-#growth_BA(param, M, T)
+growth_BA(param, p.M, T)
 
 
 ## Carrying capacity - K 
@@ -95,7 +95,7 @@ function carryingcapacity_BA(I_K, param, M, T)
     mass = M .^ s_res
     boltz = boltzmann(Ea, T)
     carrycap = intercept .* mass .* boltz
-    carrycap[2:3] .= 0   # only basal species has carrying capacity
+    #carrycap[2:3] .= 0   # only basal species has carrying capacity
     return carrycap
 end
 # carryingcapacity_BA(I_K, param, M, T)
