@@ -33,9 +33,9 @@ function BEFW(du, u, p, t)
     return dbdt
 end
 
-G = ifelse.(G .== Inf, 0, G)
+# G = ifelse.(G .== Inf, 0, G)
 
-findall(G.=-Inf)
+# findall(G.=-Inf)
 
-growth[2]
-typeof(growth[2])
+# growth[2]
+# typeof(growth[2])

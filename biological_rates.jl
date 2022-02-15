@@ -80,7 +80,7 @@ function growth_BA(param, M, T)
     growth[2:3] .= 0  # only basal species has growth rate
     return growth
 end
-growth_BA(param, p.M, T)
+
 
 
 ## Carrying capacity - K 
@@ -91,14 +91,14 @@ function carryingcapacity_BA(I_K, param, M, T)
     s_res = param.s_res_K
     Ea = param.Ea_K
     # calculate terms in carrying capacity equation
-    intercept = exp(I)
+    intercept = I
     mass = M .^ s_res
     boltz = boltzmann(Ea, T)
     carrycap = intercept .* mass .* boltz
     #carrycap[2:3] .= 0   # only basal species has carrying capacity
     return carrycap
 end
-# carryingcapacity_BA(I_K, param, M, T)
+
 
 ## Metabolism - x
 function metabolism_BA(param, M, T)
@@ -114,7 +114,7 @@ function metabolism_BA(param, M, T)
     metab[1] = 0 # basal species has no metabolic rate
     return metab
 end
-# metabolism_BA(param, M, T)
+
 
 
 # the following parameters are required for feeding terms maximum ingestion and half saturation density, which are resource and consumer specific
@@ -193,7 +193,7 @@ function max_ingestion_BA(param, M, Z, T)
 
     return mat
 end
-#max_ingestion_BA(param, M, Z, T)
+
 
 ## Half saturation density - β
 function half_saturation_BA(param, M, Z, T)
@@ -220,5 +220,5 @@ function half_saturation_BA(param, M, Z, T)
     mat[3,2] = intercept * mass_res[2] * mass_con[3] * boltz * 1/(α_m * th_m * th_T)
     return mat
 end
-# half_saturation_BA(param, M, Z , T)
+
 

@@ -10,9 +10,11 @@ Pkg.activate(".")
 Pkg.add("Plots")
 Pkg.add("DifferentialEquations")
 Pkg.add("SparseArrays")
+Pkg.add("DataFrames")
+
 
 ## check package status
 Pkg.status()
 
 ## load packages
-using Plots, DifferentialEquations, SparseArrays
+using Plots, DifferentialEquations, SparseArrays, DataFrames
