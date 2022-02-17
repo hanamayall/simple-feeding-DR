@@ -157,13 +157,15 @@ end
 
 ## Handling time (temperature dependence) thT
 function handling_temp(param, T)
+    # Temperature conversion from K to C
+    TC = T - 273.15
     # extract parameter values from param
     I = param.I_thT 
     s1 = param.s1_thT
     s2 = param.s2_thT
     # temperature scaling
-    T_scale1 = s1 * T
-    T_scale2 = s2 * T^2
+    T_scale1 = s1 * TC
+    T_scale2 = s2 * TC^2
     return exp(I + T_scale1 + T_scale2)
 end
 
@@ -181,7 +183,7 @@ function max_ingestion_BA(param, M, Z, T)
     mass_con = M .^ s_con
     boltz = boltzmann(Ea, T)
     th_m = handling_mass(param, Z)
-    th_T = handling_temp(param, Z)
+    th_T = handling_temp(param, T)
 
     # create empty matrix for values
     mat = zeros(3,3)
@@ -209,7 +211,7 @@ function half_saturation_BA(param, M, Z, T)
     boltz = boltzmann(Ea, T)
     α_m = attack_mass(param, Z)
     th_m = handling_mass(param, Z)
-    th_T = handling_temp(param, Z)
+    th_T = handling_temp(param, T)
 
     # create empty matrix for values
     mat = zeros(3,3)
