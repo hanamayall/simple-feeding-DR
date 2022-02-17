@@ -14,7 +14,7 @@ T20 = 293.15
 T30 = 303.15
 Tmax = 313.15
 
-######### 1a - K 
+######### 2a - K 
 carryingcapacity_BA(I_K, param, M, Tmin)  # 6.469796324965876
 carryingcapacity_BA(I_K, param, M, T10)   # 2.229581330642422
 carryingcapacity_BA(I_K, param, M, T20)   # 0.8262686110014499
@@ -22,7 +22,7 @@ carryingcapacity_BA(I_K, param, M, T30)   # 0.32693445475490657
 carryingcapacity_BA(I_K, param, M, Tmax)  # 0.1372514415844402
 # CORRECT #
 
-######### 1b - r 
+######### 2b - r 
 growth_BA(param, M, Tmin) # 4.293834089901734e-8
 growth_BA(param, M, T20)  # 4.900749719809166e-7
 growth_BA(param, M, T30)  # 1.4677418185488954e-6
@@ -30,7 +30,7 @@ growth_BA(param, M, Tmax) # 4.098371477948643e-6
 # CORRECT #
 
 
-######### 1c - x relative to r
+######### 2c - x relative to r
 metabolism_BA(param, M, Tmin) # 3.6997852501357905e-8
 3.6997852501357905e-8/4.293834089901734e-8            # 0.8616507234960403
 
@@ -46,7 +46,7 @@ metabolism_BA(param, M, Tmax) # 1.5646345778326476e-6
 # CORRECT #
 
 
-######### 1d - y relative to x 
+######### 2d - y relative to x 
 max_ingestion_BA(param, M, Z, Tmin) # 2.92703e-6 
 2.92703e-6/3.6997852501357905e-8                      # 79.11351070694093
 
@@ -64,7 +64,7 @@ max_ingestion_BA(param, M, Z, Tmax) #  1.35309e-5
 # CORRECT # 
 
 
-######### 1e - B0 relative to K 
+######### 2e - B0 relative to K 
 half_saturation_BA(param, M, Z, Tmin) # 2.08984 
 2.08984 / 6.469796324965876                            # 0.3230148052629806
 
@@ -80,3 +80,82 @@ half_saturation_BA(param, M, Z , T30) # 2.0392
 half_saturation_BA(param, M, Z , Tmax) # 1.22858
 1.22858/ 0.1372514415844402                           # 8.951308531387262
 # CORRECT #
+
+######### 2f - biomass extremes
+# temperature gradient
+allT = [0:1:40;] .+ 273.15
+# time span for each simulation
+tspan = (0.0, 315360000000.0)
+# define extinction threshold
+threshold = 10e-12
+#### data frame to store outputs
+dfT = DataFrame(
+    Z = [],
+    I_K = [],
+    T = [],
+    K = [],
+    r = [],
+    x_2 = [],
+    y_21 = [],
+    B0_21 = [],
+    maxB1 = [],
+    maxB2 = [],
+    maxB3 = [],
+    sp_survival = []
+)
+
+### Loop over fertilisation gradient
+
+for T in allT
+
+    # generate parameters specific to this combo of Z, I_K and T
+    p = ModelParameters(param, T, I_K, Z)
+
+    # Calculate starting biomasses
+    u0 = [p.K[1]/2, p.K[1]/2, p.K[1]/2]
+            
+    # Define the problem 
+    prob = ODEProblem(BEFW, u0, tspan, p)
+
+    # Solve the problem
+    sol = solve(prob)
+
+
+    ###### Output metrics ######
+    # turn vector output of biomasses into matrix 
+    matrix_u = hcat(sol.u...)' # 56×3 adjoint(::Matrix{Float64}) with eltype Float64: 
+
+    ### Biomass extremes
+    maxB1 = maximum(matrix_u[:,1])
+    maxB2 = maximum(matrix_u[:,2])
+    maxB3 = maximum(matrix_u[:,3])
+
+    ### Number of surviving species
+    # final biomasses
+    final_u = matrix_u[length(sol.t),:]
+
+    # count number of species remaining that are above extinction threshold
+    survived = count(final_u .> threshold)
+
+    ### Push outputs to DataFrame
+    push!(dfT, [
+        Z,
+        I_K,
+        T,
+        p.K[1],
+        p.r[1],
+        p.x[2],
+        p.y[2,1],
+        p.B0[2,1],
+        maxB1,
+        maxB2,
+        maxB3,
+        survived
+        ])
+
+    # print some stuff - see how the simulation is progressing
+    println(("Z = $Z", "I_K = $I_K", "T = $T"))
+end
+
+
+dfT

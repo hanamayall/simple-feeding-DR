@@ -26,10 +26,10 @@ function ModelParameters(param, T, I_K, Z)
     @assert x[1] == 0.0
 
     ### Calculate maximum ingestion
-    y = max_ingestion_BA(param, M, T, Z)
+    y = max_ingestion_BA(param, M, Z, T)
 
     ### Calculate half saturation density
-    B0 = half_saturation_BA(param, M, T, Z)
+    B0 = half_saturation_BA(param, M, Z, T)
 
     # Combine parameters into Tuple
     ModelParameters = (M = M, K = K, r = r, x = x, y = y, B0 = B0)

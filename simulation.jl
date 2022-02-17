@@ -91,10 +91,7 @@ end
 
 df
 
-Z = 1
-I_K = 20
-T = 293.15
-
+maximum(df[!,12])
 
 # u0
 # typeof(u0)
@@ -113,10 +110,30 @@ T = 293.15
 
 # count(final_u .> threshold)
 
-# 10000*365*24*60*60
+10000*365*24*60*60
 
 
 # ### finding biomass extremes
 # maximum(matrix_u[:,2])
 
 maximum(eachrow(df))
+
+Z = 1
+T = 274.15
+I_K = 3
+# generate parameters specific to this combo of Z, I_K and T
+p = ModelParameters(param, T, I_K, Z)
+
+# Calculate starting biomasses
+u0 = [p.K[1]/2, p.K[1]/2, p.K[1]/2]
+
+# time span for each simulation
+tspan = (0.0, 315360000000.0)
+
+# Define the problem 
+prob = ODEProblem(BEFW, u0, tspan, p)
+
+# Solve the problem
+sol = solve(prob)
+
+plot(sol)
