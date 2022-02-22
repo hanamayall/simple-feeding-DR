@@ -30,7 +30,7 @@ function BEFW(du, u, p, t)
         du[i] = dbdt[i] #can't return du directly, have to have 2 different objects dbdt and du for some reason... 
     end 
 
-    return dbdt
+    nothing
 end
 
 # G = ifelse.(G .== Inf, 0, G)

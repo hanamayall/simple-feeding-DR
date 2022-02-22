@@ -119,8 +119,8 @@ maximum(df[!,12])
 maximum(eachrow(df))
 
 Z = 1
-T = 274.15
-I_K = 3
+T = 279.15
+I_K = 9
 # generate parameters specific to this combo of Z, I_K and T
 p = ModelParameters(param, T, I_K, Z)
 

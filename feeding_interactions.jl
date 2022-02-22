@@ -27,8 +27,9 @@ function functional_response(h = 1 ;B, parameters)
     return F    
 end
 
-fr = functional_response(B = u, parameters = p)
-
+fr = functional_response(B = B, parameters = p)
+p.B0[]
+B = [1,0.5,0.5]
 
 #write function to calculate consumption gains and losses from the functional response, biomasses and assimilation energy
 function consumption(e = 0.85; B, fr)
