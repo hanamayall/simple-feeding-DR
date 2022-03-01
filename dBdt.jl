@@ -3,6 +3,11 @@
 
 # BEFW model
 function BEFW(du, u, p, t)
+    
+    for i in 1:length(u)
+        u[i] = u[i] <= 10e-12 ? 0.0 : u[i]
+    end
+
     ### Growth (gain)
     producers = [1.0, 0.0, 0.0]
     G = (1 .- (u ./ p.K)) .* producers # logistic growth term
