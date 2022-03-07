@@ -32,6 +32,9 @@ df3 = DataFrame(
 )
 
 ### Simulation loops
+T = 300.15
+I_K = 3
+Z = 1
 
 for I_K in allI_K
     for T in allT
@@ -47,14 +50,14 @@ for I_K in allI_K
 
         # Solve the problem
         sol = solve(prob, maxiters = 1e7)
-
-
+        
         ###### Output metrics ######
         # turn vector output of biomasses into matrix 
         matrix_u = hcat(sol.u...)' # 56×3 adjoint(::Matrix{Float64}) with eltype Float64: 
 
+
         ### Biomass extremes
-        maxB1 = maximum(matrix_u[:,1])
+        maxB1 = maximum(matrix_u[:74,1])
         maxB2 = maximum(matrix_u[:,2])
         maxB3 = maximum(matrix_u[:,3])
 

@@ -28,6 +28,9 @@ df = DataFrame(
     maxB1 = [],
     maxB2 = [],
     maxB3 = [],
+    minB1 = [],
+    minB2 = [],
+    minB3 = [],
     sp_survival = []
 )
 
@@ -46,7 +49,7 @@ for Z in allZ
             prob = ODEProblem(BEFW, u0, tspan, p)
 
             # Solve the problem
-            sol = solve(prob)
+            sol = solve(prob, maxiters = 1e7)
 
 
             ###### Output metrics ######
@@ -54,9 +57,13 @@ for Z in allZ
             matrix_u = hcat(sol.u...)' # 56×3 adjoint(::Matrix{Float64}) with eltype Float64: 
 
             ### Biomass extremes
-            maxB1 = maximum(matrix_u[:,1])
-            maxB2 = maximum(matrix_u[:,2])
-            maxB3 = maximum(matrix_u[:,3])
+            maxB1 = maximum(matrix_u[2 * Int64(round(length(matrix_u[:,1])/3)):Int64(length(matrix_u[:,1])),1])
+            maxB2 = maximum(matrix_u[2 * Int64(round(length(matrix_u[:,1])/3)):Int64(length(matrix_u[:,1])),2])
+            maxB3 = maximum(matrix_u[2 * Int64(round(length(matrix_u[:,1])/3)):Int64(length(matrix_u[:,1])),3])
+
+            minB1 = minimum(matrix_u[2 * Int64(round(length(matrix_u[:,1])/3)):Int64(length(matrix_u[:,1])),1])
+            minB2 = minimum(matrix_u[2 * Int64(round(length(matrix_u[:,1])/3)):Int64(length(matrix_u[:,1])),2])
+            minB3 = minimum(matrix_u[2 * Int64(round(length(matrix_u[:,1])/3)):Int64(length(matrix_u[:,1])),3])
 
             ### Number of surviving species
             # final biomasses
@@ -78,6 +85,9 @@ for Z in allZ
                 maxB1,
                 maxB2,
                 maxB3,
+                minB1,
+                minB2,
+                minB3,
                 survived
             ])
 
@@ -89,9 +99,6 @@ for Z in allZ
 end
 
 
-df
-
-maximum(df[!,12])
 
 # u0
 # typeof(u0)

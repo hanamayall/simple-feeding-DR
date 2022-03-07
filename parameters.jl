@@ -36,6 +36,6 @@ function ModelParameters(param, T, I_K, Z)
     return ModelParameters
 end
 
-p = ModelParameters(param, T, I_K, Z)
-typeof(p)
-p.B0
+# p = ModelParameters(param, T, I_K, Z)
+# typeof(p)
+# p.B0

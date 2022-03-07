@@ -4,6 +4,7 @@
 # BEFW model
 function BEFW(du, u, p, t)
     
+    ### extinction below threshold value
     for i in 1:length(u)
         u[i] = u[i] <= 10e-12 ? 0.0 : u[i]
     end

@@ -46,7 +46,7 @@ param = (
     # Assimilation efficiencies
     e = 0.85
 )
-typeof(param)
+#typeof(param)
 
 
 #### Mass and temperature dependence
@@ -224,10 +224,3 @@ function half_saturation_BA(param, M, Z, T)
 end
 
 
-temps = [0:1:40;] .+ 273.15
-M = BodyMasses(Z=Z)
-B0 = map(x -> (half_saturation_BA(param, M, Z, x)[2,1])/(carryingcapacity_BA(I_K, param, M, x)[1]), temps) #get b0 for interaction 2 -> 1 
-pltb0 = scatter(temps .- 273.15, B0, c = :black
-    , ylabel = "B0", xlabel = "temperature (C)"
-    , label = "calc.", leg = :topright
-)
