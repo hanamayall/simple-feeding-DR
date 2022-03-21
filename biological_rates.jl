@@ -48,7 +48,6 @@ param = (
 )
 #typeof(param)
 
-
 #### Mass and temperature dependence
 # write a function to calculate the Boltzmann term from the activation energy
 function boltzmann(Ea, T)
@@ -222,5 +221,4 @@ function half_saturation_BA(param, M, Z, T)
     mat[3,2] = intercept * mass_res[2] * mass_con[3] * boltz * 1/(α_m * th_m * th_T)
     return mat
 end
-
 
