@@ -17,7 +17,7 @@ doses = [0:1:100.0;]
 
 # example to test 
 responses = log_logistic(dose = doses, slope = 5.0, lower = 0.0, xmid = 50.0)
-plot(doses, responses, ylim = 1.0)
+plot(doses, responses, ylim = 1.0, label = "b=5, c=0, d=1, e=50")
 
 
 
@@ -25,9 +25,9 @@ plot(doses, responses, ylim = 1.0)
 plt1 = plot([NaN], [NaN], label = "", title = "Varying slopes")
 
 # range of slope values
-slopes = [0.5, 1.0, 5.0, 10.0, 20.0, 50.0]
+slopes = [0.25, 0.5, 1.0, 2.0, 4.0, 8.0, 16.0, 32.0, 64.0]
 for sl in slopes
-    responses = log_logistic(dose = doses, slope = sl, lower = 0.3, xmid = 50.0)
+    responses = log_logistic(dose = doses, slope = sl, lower = 0.0, xmid = 50.0)
     plot!(doses, responses, label = "$sl")
 end
 plt1
@@ -36,7 +36,7 @@ plt1
 plt2 = plot([NaN], [NaN], label = "", title = "Varying asymptotes")
 
 # range of asymptote values
-asymptotes = [0.1, 0.3, 0.5, 0.8]
+asymptotes = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
 for as in asymptotes
     responses = log_logistic(dose = doses, slope = 5.0, lower = as, xmid = 50.0)
     plot!(doses, responses, label = "$as")
@@ -47,8 +47,8 @@ plt2
 ### Vary inflection point
 plt3 = plot([NaN], [NaN], label = "", title = "Varying inflection points")
 
-# range of asymptote values
-inflections = [1.0, 5.0, 10.0, 20.0, 50.0, 80.0]
+# range of xmid values
+inflections = [1.0, 5.0, 10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0]
 for infl in inflections
     responses = log_logistic(dose = doses, slope = 5.0, lower = 0.5, xmid = infl)
     plot!(doses, responses, label = "$infl")
