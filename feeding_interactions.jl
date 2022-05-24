@@ -26,12 +26,11 @@ function functional_response(h = 1 ;B, parameters)
     end 
     return F    
 end
-
 # fr = functional_response(B = B, parameters = p)
 # p.B0[]
 # B = [1,0.5,0.5]
 
-function functional_response_CG(h = 1;B, parameters, dose = doses, slope = 5.0, lower = 0.0, xmid = 50.0)
+function functional_response_CG(B, parameters, dose; slope = 5.0, lower = 0.0, xmid = 50.0, h = 1)
     ### Extract maximum ingestion and half saturation density
     y = parameters.y
     B0 = parameters.B0
@@ -57,8 +56,10 @@ function functional_response_CG(h = 1;B, parameters, dose = doses, slope = 5.0, 
     ### Calculate effect proportion from concentration C 
     response = log_logistic(dose, slope, lower, xmid)
 
-    return response * F    
+    return response .* F    
 end
+
+
 
 #write function to calculate consumption gains and losses from the functional response, biomasses and assimilation energy
 function consumption(e = 0.85; B, fr)

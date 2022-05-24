@@ -42,6 +42,9 @@ function ModelParameters_CG(param, T, I_K, Z, dose, target_rate::String ; slope 
     ### Calculate body masses
     M = BodyMasses(Z=Z)
 
+    ### Calculate effect proportion from dose
+    response = log_logistic(dose = dose, slope = slope, lower = lower, xmid = xmid)
+    
     ### Calculate carrying capacity
     K = carryingcapacity_BA(I_K, param, M, T)
     #@assert K[2] == 0 # defensive programming
@@ -56,30 +59,43 @@ function ModelParameters_CG(param, T, I_K, Z, dose, target_rate::String ; slope 
     x = metabolism_BA(param, M, T)
     @assert x[1] == 0.0
 
-    ### Calculate effect proportion from dose
-    response = log_logistic(dose = dose, slope = slope, lower = lower, xmid = xmid)
-
     ### Calculate maximum ingestion
     y = max_ingestion_BA(param, M, Z, T)
 
     ### Calculate half saturation density
     B0 = half_saturation_BA(param, M, Z, T)
 
-    if target_rate == "y"
+    ### Alter target rate in proportion to dose response
+    if target_rate == "r" # growth
+        r = response .*  r
+    end
+
+    if target_rate == "x" # metabolism
+        x = response .* x
+    end
+
+    if target_rate == "y" # max consumption
         y = response .* y 
     end
 
-    if target_rate == "B0"
+    if target_rate == "B0" # half saturation density
         B0 = response .* B0 
     end
 
+    if target_rate == "FR" # functional response term
+        y = y
+        B0 = B0
+    end
+
     # Combine parameters into Tuple
-    ModelParameters = (M = M, K = K, r = r, x = x, y = y, B0 = B0)
+    ModelParameters = (M = M, K = K, r = r, x = x, y = y, B0 = B0, dose = dose, slope = slope, lower = lower, xmid = xmid, response = response)
     return ModelParameters
 end
 
 #dose = 50.0
-#ModelParameters_CG(param, T, I_K, Z, dose, "y", slope = 5.0, lower = 0.0, xmid = 50.0)
+# ModelParameters_CG(param, T, I_K, Z, 30.0, "y", slope = 5.0, lower = 0.0, xmid = 50.0)
+# ModelParameters_CG(param, T, I_K, Z, 30.0, "B0", slope = 5.0, lower = 0.0, xmid = 50.0)
+p = ModelParameters_CG(param, T, I_K, Z, 30.0, "x", slope = 5.0, lower = 0.0, xmid = 50.0)
 
 #log_logistic(dose = dose, slope = 5.0, lower = 0.0, xmid = 50.0)
 # p = ModelParameters(param, T, I_K, Z)
