@@ -17,5 +17,5 @@ Pkg.activate(".")
 Pkg.status()
 
 ## load packages
-using Plots, DifferentialEquations, SparseArrays, DataFrames, CSV
+using Plots, DifferentialEquations, SparseArrays, DataFrames, CSV, Statistics
 

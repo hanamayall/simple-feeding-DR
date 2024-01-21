@@ -25,19 +25,22 @@ plot(doses, responses, ylim = 1.0, label = "b=5, c=0, d=1, e=50")
 plt1 = plot([NaN], [NaN], label = "", title = "Varying slopes", xlabel = "dose", ylabel = "response")
 
 # range of slope values
-slopes = [4.0, 8.0, 16.0, 32.0, 64.0]
+slopes = collect(exp2.(range(1, stop = 6, length = 10)))
 for sl in slopes
     responses = log_logistic(dose = doses, slope = sl, lower = 0.0, xmid = 50.0)
     plot!(doses, responses, label = "$sl")
 end
 plt1
+log(100)
+
+
 
 ### Vary asymptote
 plt2 = plot([NaN], [NaN], label = "", title = "Varying asymptotes"
 , xlabel = "dose", ylabel = "response")
 
 # range of asymptote values
-asymptotes = [0.0, 0.1, 0.2, 0.3, 0.4]
+asymptotes = collect(range(0, stop = 0.9, length = 10))
 for as in asymptotes
     responses = log_logistic(dose = doses, slope = 8.0, lower = as, xmid = 50.0)
     plot!(doses, responses, label = "$as")
@@ -50,7 +53,7 @@ plt3 = plot([NaN], [NaN], label = "", title = "Varying inflection points"
 , xlabel = "dose", ylabel = "response")
 
 # range of xmid values
-inflections = [20.0, 30.0, 40.0, 50.0, 60.0]
+inflections = collect(range(15, stop = 60, length = 10))
 for infl in inflections
     responses = log_logistic(dose = doses, slope = 8.0, lower = 0.0, xmid = infl)
     plot!(doses, responses, label = "$infl")
